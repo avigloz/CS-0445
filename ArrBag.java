@@ -87,13 +87,13 @@ public class ArrBag<T>
 	// PERFORMS LOGICAL (SHALLOW) REMOVE OF ALL THE ELEMENTS IN THE ARRAY (SIMPLE 1 LINER!)
 	public void clear()
 	{
-		Arrays.fill(theArray, "");
+		count = 0;
 	}
 
 	// RETURNS TRUE IF THERE ARE NO ELEMENTS IN THE ARRAY, OTHERWISE FALSE
 	public boolean isEmpty()
 	{
-		if (count > 0)
+		if (count == 0)
 			return true;
 		return false;
 	}
