@@ -5,22 +5,19 @@ public class SignedFraction extends Fraction
 	// FULL CONSTRUCTOR - STORES SIGN OF THE FRACTION THEN SETS BOTH number and denom POSITIVE
 	public SignedFraction( int n, int d )
 	{
-		// FYI: JAVA JUST CALLED YOUR PARENT'S DEFAULT CONSTRUCTOR. YOU ARE 0/1 NOW
-		// WE'LL FIX THAT SOON ENUF
+		//super(n, d);
+		setSign(1);
 		if (n < 0 || d < 0){
 			if (!(n < 0 && d < 0))
 				setSign(-1);
 			else
 				setSign(1);
 		}
-		else
-			setSign(1);
 		n = Math.abs(n);
 		d = Math.abs(d);
-		// SET YOUR sign TO EITHER -1 OR 1 BASED ON INCOMING n AND d
-		// ASSIGN IN TO n AND D, THEIR abs VALUES. i.e. FLIP EM POSITIVE
 
-		// NOW DO EXACTLY AS YOUR PARENT DID AT THIS POINT
+		// Why not just call super(n, d)? The parent does all the gcd, absolute values, etc. already.
+
 		int gcd = gcd( n, d );
 		setNumer(n/gcd);
 		setDenom(d/gcd);
@@ -44,7 +41,7 @@ public class SignedFraction extends Fraction
 	// OVERWRITE/RIDE PARENT toString
 	public String toString()
 	{
-		return "";  // REPLACE WITH YOUR CODE
+		return (getSign() * getNumer()) + "/" + getDenom() + "\t=" + (getSign() * (double)getNumer()/(double)getDenom());  // REPLACE WITH YOUR CODE
 	}
 
 }// EOF
