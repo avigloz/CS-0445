@@ -60,28 +60,59 @@ public class LinkedList<T>
 
 	// ########################## Y O U   W R I T E    T H E S E    M E T H O D S ########################
 
-
-	public int size() // OF COURSE MORE EFFICIENT TO MAINTAIN COUNTER. BUT YOU WRITE LOOP!
+	public int size()
 	{
-		return 0; // CHANGE TO YOUR CODE
+        int counter = 0;
+        for (Node curr = head; curr.getNext() != null; curr = curr.getNext())
+            counter++;
+        return counter;
 	}
 	public boolean empty()
 	{
-		return true; // CHANGE TO YOUR CODE
+		return (size() == 0) ? true : false;
 	}
 	public boolean contains( T key )
 	{
-		return false; // CHANGE TO YOUR CODE
+		return (search(key) != null) ? true : false;
 	}
 	public Node<T> search( T key )
 	{
-		return  null; // CHANGE TO YOUR CODE
+        for (Node curr = head; curr.getNext() != null; curr = curr.getNext())
+        if (curr.getData().equals(key))
+			return curr;
+        return null;
 	}
 	public void insertAtTail(T data) // TACK A NEW NODE (CABOOSE) ONTO THE END OF THE LIST
 	{
+		if (size() == 0)
+        	insertAtFront(data);
+        else {
+            Node<T> temp = head;
+            while (true){
+                if (temp.getNext() != null)
+                    temp = temp.getNext();
+                else {
+                    temp.setNext(new Node<T>(data));
+                    break;
+                }
+            }
+        }
 	}
 	public void insertInOrder(T  data) // PLACE NODE IN LIST AT ITS SORTED ORDER POSTIOPN
 	{
+		// if (size() == 0)
+        // 	insertAtFront(data);
+        // else {
+        //     Node<T> temp = head;
+        //     while (true){
+        //         if (temp.getNext() != null && temp.compareTo(temp.getNext()) <= 0)
+        //             temp = temp.getNext();
+        //         else {
+        //             temp.setNext(new Node<T>(data));
+        //             break;
+        //         }
+        //     }
+        // }
 	}
 	public boolean remove(T key) // FIND/REMOVE 1st OCCURANCE OF A NODE CONTAINING KEY
 	{
