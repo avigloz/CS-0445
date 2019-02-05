@@ -1,8 +1,0 @@
-charlie
-bravo
-delta
-alpha
-golf
-india
-hotel
-echo

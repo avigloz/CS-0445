@@ -7,7 +7,7 @@ public class LinkedListTester
 	{
 		LinkedList<String> list1 = new LinkedList<String>( args[0], false );  // false = INSERTATTAIL CALLED ON EACH T READ FROM FILE
 		System.out.format("list1 %s size %d unordered %s\n",args[0],list1.size(),list1 ); // invokes toString
-		
+
 		 list1.remove( "charlie" ); list1.remove("echo"); list1.remove("zebra"); // HEAD, TAIL, NOWHERE
 		System.out.format("list1 (after remove charlie, echo & zebra) %s\n",list1 ); // invokes toString
 		
