@@ -169,10 +169,11 @@ public class LinkedList<T> {
 	public LinkedList<T> union(LinkedList<T> other) {
 		LinkedList<T> unionList = new LinkedList<T>();
 		for (Node curr = head; curr != null; curr = curr.getNext())
-			unionList.insertInOrder((T) curr.getData());
-		for (Node curr = other.head; curr != null; curr = curr.getNext())
-			if (!unionList.contains((T) curr.getData()))
+			if (!unionList.contains((T)curr.getData()))
 				unionList.insertInOrder((T) curr.getData());
+		for (Node curr = other.head; curr != null; curr = curr.getNext())
+			if (!unionList.contains((T)curr.getData()))
+				unionList.insertInOrder((T)curr.getData());
 		return unionList;
 	}
 
@@ -184,7 +185,6 @@ public class LinkedList<T> {
 				interList.insertInOrder((T) curr.getData());
 		return interList;
 	}
-
 	@SuppressWarnings("unchecked")
 	public LinkedList<T> diff(LinkedList<T> other) {
 		LinkedList<T> diffList = new LinkedList<T>();
@@ -193,9 +193,7 @@ public class LinkedList<T> {
 				diffList.insertInOrder((T) curr.getData());
 		return diffList;
 	}
-
 	public LinkedList<T> xor(LinkedList<T> other) {
 		return union(other).diff(inter(other));
 	}
-
 } // END LINKEDLIST CLASS
