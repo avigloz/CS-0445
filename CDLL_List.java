@@ -38,15 +38,15 @@ public class CDLL_List<T>
 	// ########################## Y O U   W R I T E / F I L L   I N   T H E S E   M E T H O D S ########################
 
 	// OF COURSE MORE EFFICIENT TO KEEP INTERNAL COUNTER BUT YOU COMPUTE IT DYNAMICALLY WITH A TRAVERSAL LOOP
-	@SuppressWarnings("unchecked")
 	public int size()
 	{
-        int num = 0;
-        if (head == null)
-            return num;
-        for (CDLL_Node curr = head; curr.getNext() != head; curr = curr.getNext())
-            num ++;
-        return num + 1;
+        // int num = 0;
+        // if (head == null)
+        //     return num;
+        // for (CDLL_Node curr = head; curr.getNext() != head; curr = curr.getNext())
+        //     num ++;
+		// return num + 1;
+		return count + 1;
 	}
 
 
@@ -62,12 +62,14 @@ public class CDLL_List<T>
 			newNode.setPrev( newNode );
 			head = newNode;
 			return;
-        }
-        newNode.setPrev(head.getPrev());
-        head.getPrev().setNext(newNode);
-        head.setPrev(newNode);
-        newNode.setNext(head);
-        head = newNode;
+		}
+		CDLL_Node<T> tail = head.getPrev();
+		newNode.setNext(head);
+		head.setPrev(newNode);
+		head = newNode;
+		head.setPrev(tail);
+		tail.setNext(head);
+		count++;
 		// NOT EMPTY. INSERT NEW NODE  BETWEEN HEAD POINTER AND 1ST NODE
 		// MAKE HEAD POINT TO NEW NODE
 	}
@@ -77,15 +79,19 @@ public class CDLL_List<T>
 	public void insertAtTail(T data)
 	{
         // BASE CASE WRITTEN FOR YOU
-        if (head == null)
-            insertAtFront(data);
-        else{
-			CDLL_Node curr = head;
-			do{
+        if (head == null){
+			insertAtFront(data);
+			return;
+		}
+		CDLL_Node<T> newNode = new CDLL_Node(data,null,null);
+		CDLL_Node tail = head.getPrev();
 
-			} while(curr.getNext() != head)
-        }
-        CDLL_Node<T> newNode = new CDLL_Node( data,null,null);
+		newNode.setNext(head);
+		newNode.setPrev(tail);
+		head.setPrev(newNode);
+		tail.setNext(newNode);
+
+		count++;
 		// NOT EMPTY. INSERT NEW NODE AFTER THE LAST/TAIL NODE
 	}
 
@@ -99,30 +105,27 @@ public class CDLL_List<T>
     @SuppressWarnings("unchecked")
 	public CDLL_Node<T> search( T key )
 	{
-        for (CDLL_Node curr = head; curr.getNext() != head; curr = curr.getNext())
-            if (curr.getData().equals(key))
-                return curr;
+		CDLL_Node curr = head;
+		do {
+			if (curr.getData().equals(key))
+				return curr;
+			curr = curr.getNext();
+		} while (curr != head);
         return null;
 	}
 	// RETURNS CONCATENATION OF CLOCKWISE TRAVERSAL
-	@SuppressWarnings("unchecked")
 	public String toString()
 	{
         if (head == null)
             return null;
         String toString = "";
-        // for (CDLL_Node curr = head; curr.getNext() != head; curr = curr.getNext()){
-        //     toString += (curr.getData());
-        //     if (curr.getNext() != head)
-        //         toString+="<=>";
-        // }
         CDLL_Node curr = head;
         do {
             toString += (curr.getData());
             if (curr.getNext() != head)
                 toString+="<=>";
             curr = curr.getNext();
-		} while (curr.getNext() != head);
+		} while (curr != head);
         return toString;
 	}
 } // END CDLL_LIST CLASS
