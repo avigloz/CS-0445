@@ -5,7 +5,6 @@ public class CDLL_JosephusList<T>
 {
 	private CDLL_Node<T> head;  // pointer to the front (first) element of the list
 	private int count=0;
-	private Scanner kbd = new Scanner(System.in); // FOR DEBUGGING. See executeRitual() method 
 	public CDLL_JosephusList()
 	{
 		head = null; // compiler does this anyway. just for emphasis
@@ -30,7 +29,8 @@ public class CDLL_JosephusList<T>
         if (head == null) {
             newNode.setNext(newNode);
             newNode.setPrev(newNode);
-            head = newNode;
+			head = newNode;
+			count++;
             return;
         }
         CDLL_Node tail = head.getPrev();
@@ -44,7 +44,7 @@ public class CDLL_JosephusList<T>
 	}
 	public int size()
 	{	
-		return count + 1;
+		return count;
 	}
     // RETURN REF TO THE FIRST NODE CONTAINING  KEY. ELSE RETURN NULL
     @SuppressWarnings("unchecked")
@@ -59,9 +59,8 @@ public class CDLL_JosephusList<T>
 			curr = curr.getNext();
 		} while (curr != head);
         return null;
-	}
-	
-    // RETURNS CONATENATION OF CLOCKWISE TRAVERSAL
+	}	
+    // RETURNS CONCATENATION OF CLOCKWISE TRAVERSAL
 	public String toString()
 	{
         if (head == null)
@@ -73,70 +72,67 @@ public class CDLL_JosephusList<T>
             if (curr.getNext() != head)
                 toString += "<=>";
             curr = curr.getNext();
-        } while (curr != head);
+		} while (curr != head);
         return toString;
 	}
-    @SuppressWarnings("unchecked")
 	void removeNode( CDLL_Node<T> deadNode )
 	{
         if (head == null)
             return;
-        if (head == deadNode) {
-			CDLL_Node<T> prev = head.getPrev();
-			head = head.getNext();
-			head.setPrev(prev);
-			count --;
-			return;
-        }
+        // if (deadNode == head) {
+		// 	CDLL_Node<T> prev = head.getPrev();
+		// 	head = head.getNext();
+		// 	head.setPrev(prev);
+		// 	prev.setNext(head);
+		// 	count--;
+		// 	return;
+		// }
 		CDLL_Node<T> prev = deadNode.getPrev();
 		CDLL_Node<T> next = deadNode.getNext();
 		prev.setNext(next);
 		next.setPrev(prev);
         count--;
 	}
-    @SuppressWarnings("unchecked")
 	public void executeRitual( T first2Bdeleted, int skipCount )
 	{
 		if (size() < 1 ) return;
 		CDLL_Node<T> curr = search( first2Bdeleted );
 		if ( curr==null ) return;
-		
 		// OK THERE ARE AT LEAST 2 NODES AND CURR IS SITING ON first2Bdeleted
 		do
 		{
 			CDLL_Node<T> deadNode = curr;
 			T deadName = deadNode.getData();
 
-			// ** println( "stopping on Misurda to delete Misurda");
-			System.out.println("stopping on " + deadName + " to delete " + deadName);			
+			System.out.println("stopping on " + deadName + " to delete " + deadName);
+			removeNode(deadNode);		
 			boolean clockwise = (skipCount > 0) ? true : false;
 			if (clockwise)
 				curr = deadNode.getNext();
 			else
 				curr = deadNode.getPrev();
+			if (head == deadNode)
+				head = curr;
 
-			removeNode(deadNode);
 			System.out.println("deleted. list now:   " + toString());
 
 			if (size() == 1)
 				break;
-			// ** println("deleted. list now:   HoffmanT<=>Lange<=>Lee<=>Litman<=>Melhem<=>Mosse<=>Novacky<=>Ramirez");		
-			//curr = head;
+
 
 			T name = curr.getData();
 			if (clockwise){
 				System.out.println("resuming at " + name + ", skipping " + name + " + " + (skipCount - 1) + " CLOCKWISE after");
 				for (int skips = 0; skips < skipCount; skips++)
-				curr = curr.getNext();
+					curr = curr.getNext();
 			}
 			else {
 				System.out.println("resuming at " + name + ", skipping " + name + " + " + (-skipCount - 1) + " COUNTER_CLOCKWISE after");
 				for (int skips = 0; skips < -skipCount; skips++)
 					curr = curr.getPrev();
 			}
-			kbd.nextLine();
 		}
-		while (size() >= 1 );
+		while (size() > 1 );
 
 	}
 	
