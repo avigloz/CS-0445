@@ -1,72 +1,58 @@
 import java.io.*;
 import java.util.*;
-
+ 
 // just generates all the strings & prints them as they are generated
-
+ 
 public class Boggle
-{	
+{   
     static String[][] board;
-
-    static TreeSet<String> hits = new TreeSet<String>();
-    //static HashMap<Integer, HashSet<String>> dictionary = new HashMap<Integer, HashSet<String>>();
-    static HashSet<String> dictionary = new HashSet<String>();
-    static HashSet<Integer> wordLengths = new HashSet<Integer>();
     static final short SMALLEST_WORD_LENGTH = 3;
-    //static short longestLength = 0;
+ 
+    static TreeSet<String> hits = new TreeSet<String>();
+    static TreeSet<String> dictionary = new TreeSet<String>();
+    static HashSet<Integer> wordLengths = new HashSet<Integer>();
 
-    // DEBUG:
-	//static double startTime,endTime; // for timing
-    //static final int MILLISEC_PER_SEC = 1000;
-    //static int wordCounter = 0;
-
-	public static void main( String args[] ) throws Exception
-	{	
-        //startTime= System.currentTimeMillis();
+    public static void main( String args[] ) throws Exception
+    {   
         board = loadBoard( args[1] );
-        
+         
         BufferedReader dictFile = new BufferedReader(new FileReader(args[0]));
         while (dictFile.ready()){
             String line = dictFile.readLine();
-            if (line.length() >= SMALLEST_WORD_LENGTH){
+            // Doesn't add the word if it is smaller than 3 chars, or larger than the max possible 
+            // length (depending on board dimensions, which is just NxN).
+            if (line.length() >= SMALLEST_WORD_LENGTH && line.length() <= Math.pow(board.length, 2)){
                 dictionary.add(line);
                 wordLengths.add(line.length());
             }
+            // wordLengths keeps track of all valid lengths of word inside the dictionary.
+            // This is useful for pruning later, as it simply skips all words whose length is not in wordsLength.
         }
         dictFile.close();
-        
-		for (int row = 0; row < board.length; row++)
-			for (int col = 0; col < board[row].length; col++){
+
+        for (int row = 0; row < board.length; row++)
+            for (int col = 0; col < board[row].length; col++){
                 dfs(row, col, "");
             }
-    // FOR EACH [R][C] THE WORD STARTS EMPTY
+        // FOR EACH [R][C] THE WORD STARTS EMPTY
 
+        // Print out hits.
         for (String word : hits)
             System.out.println(word);
-        
-        // DEBUG:
-        //System.out.println(hits.size());
-        //System.out.println("TOTAL WORDS: " +wordCounter);
-		//endTime =  System.currentTimeMillis(); // for timing
-		//System.out.println("GENERATION COMPLETED: runtime=" + (endTime-startTime)/MILLISEC_PER_SEC );
-		
-	} // END MAIN ----------------------------------------------------------------------------
-
-	static void dfs( int r, int c, String word  )
-	{	
+    } // END MAIN ----------------------------------------------------------------------------
+ 
+    static void dfs( int r, int c, String word)
+    {   
+        // Append new character to current word
         word += board[r][c];
+        // Search dictionary for the word. 
         if (searchDict(word))
             hits.add(word);
-        //wordCounter++;
-        /*
-        NORTH: r-1, c
-        NORTH-EAST: r-1, c+1
-        EAST: r, c+1
-        SOUTH EAST: r+1, c+1
-        SOUTH: r+1, c
-        SOUTH WEST: r+1, c-1
-        WEST: r, c-1
-        NORTH WEST: r-1, c-1
-        */
+        else
+            if (!dictionary.higher(word).startsWith(word))
+                return;
+        // If the dictionary doesn't have the word, then check the dictionary for the next highest word
+        // (lexographically greater). If the next highest word doesn't have current word as a prefix, STOP.
 
         // N
         if (((r - 1 >= 0 && r - 1 < board.length) && (c >= 0)) && board[r - 1][c] != null){
@@ -124,25 +110,28 @@ public class Boggle
             dfs (r - 1, c - 1, word); // move, add String to NORTHWEST to word.
             board[r][c] = unMarked; // unmark, for next iteration.
         }                
-	} // END DFS ----------------------------------------------------------------------------
-
-	//=======================================================================================
-	static String[][] loadBoard( String fileName ) throws Exception
-	{	Scanner infile = new Scanner( new File(fileName) );
-		int rows = infile.nextInt();
-		int cols = rows;
-		String[][] board = new String[rows][cols];
-		for (int r=0; r<rows; r++)
-			for (int c=0; c<cols; c++)
-				board[r][c] = infile.next();
-		infile.close();
-		return board;
-	} //END LOADBOARD 
+    } // END DFS ----------------------------------------------------------------------------
+ 
+    //=======================================================================================
+    static String[][] loadBoard( String fileName ) throws Exception
+    {   Scanner infile = new Scanner( new File(fileName) );
+        int rows = infile.nextInt();
+        int cols = rows;
+        String[][] board = new String[rows][cols];
+        for (int r=0; r<rows; r++)
+            for (int c=0; c<cols; c++)
+                board[r][c] = infile.next();
+        infile.close();
+        return board;
+    } //END LOADBOARD 
+     
     static boolean searchDict(String word){
+        // Checks if word is big enough, and then if the word is of a valid length.
         if (word.length() >= SMALLEST_WORD_LENGTH && wordLengths.contains(word.length()))
-            if (dictionary.contains(word))
+            if (dictionary.contains(word)) // If the dictionary contains it, return true.
                 return true;
         return false;
+ 
     }
-
+ 
 } // END BOGGLE CLASS
