@@ -1,0 +1,45 @@
+As N tends to infinity, the complexity of add() tends to O(1) because upsizing in infinite size will never become needed.
+(for an ArrBag)
+
+ArrBag:
+--------
+size() = O(1)
+get(i) = O(1)
+add(T) = O(1), occasionally O(N) when upsize is needed (log base 2 of n times, see above comment)
+contains(T) = O(N), unsorted
+
+XOR = union - intersection, or diff of union (this, other) and intersection (this, other)
+O(N^2)
+---------
+
+
+O(1):
+array.length, size() on container
+hashing a String O(1), w.r.t N size of container, O(N) on size of string (to hash)
+indexing an array, copy an array element to another index
+comparing primitives
+
+O(log base 2 of N):
+binary search
+
+O(N)
+do something for every (or up to every) element of something
+
+insertInOrder (worst case is if element goes at front, meaning all elements have to be shifted)
+Base case is O(1) for LinkedList, worst case in O(N)
+
+O(N^2)
+nested for loops, i.e traversing 2d arrays
+
+O(2^N)
+Knapsack -(NOT ON EXAM)-
+Power set
+
+O(N!)
+Permutations
+
+Complexity of Boggle is unknown. Worse than N!.
+The number of strings on a N by N grid can't be calculated.
+Very, very many  
+
+
