@@ -81,29 +81,50 @@ class BSTree<T>
 	}
 	
 	// - - - - - - -  MODIFY NOTHING ABOVE THIS LINE - - - - - - - 
-    // ITS A SEARCH - ONE OF FEW OPS YOU CAN DO ITERATIVELY
-    @SuppressWarnings("unchecked")
-	public boolean contains( T key ) 
-	{
-        if (root == null)
-            return false;
-        int comp = ((Comparable)key).compareTo( root.getKey() );
-        BSTNode curr = root;
-        for (int i = 0; i < size(); i++){
-            if (curr.getKey().equals(key))
-                break;
-            if (comp < 0){ // go left
-                if (curr.getLeft() == null)
-                    return false;
-                curr = curr.getLeft();
-            }
-            if (comp > 0){ // go right
-                if (curr.getRight() == null)
-                    return false;
-                curr = curr.getRight();
-            }
-        }
-		return true;
-	}
+	// ITS A SEARCH - ONE OF FEW OPS YOU CAN DO ITERATIVELY
 	
+	// ITERATIVE:
+
+    //@SuppressWarnings("unchecked")
+	// public boolean contains( T key ) 
+	// {
+    //     if (root == null)
+    //         return false;
+    //     int comp = ((Comparable)key).compareTo( root.getKey() );
+    //     BSTNode curr = root;
+    //     for (int i = 0; i < size(); i++){
+    //         if (curr.getKey().equals(key))
+    //             break;
+    //         if (comp < 0){ // go left
+    //             if (curr.getLeft() == null)
+    //                 return false;
+    //             curr = curr.getLeft();
+    //         }
+    //         if (comp > 0){ // go right
+    //             if (curr.getRight() == null)
+    //                 return false;
+    //             curr = curr.getRight();
+    //         }
+    //     }
+	// 	return true;
+	// }
+
+	// RECURSIVE:
+
+	public boolean contains(T key){
+		if (root == null)
+			return false;
+		return containsHelper(root, key);
+	}
+	@SuppressWarnings("unchecked")
+	public boolean containsHelper(BSTNode<T> root, T key){
+		int comp = ((Comparable)key).compareTo( root.getKey() );
+		if (root.getKey().equals(key))
+			return true;
+		if (comp < 0) // go left
+			return (root.getLeft() == null) ? false : containsHelper(root.getLeft(), key);
+		if (comp > 0) // go right
+			return (root.getRight() == null) ? false : containsHelper(root.getRight(), key);
+		return false;
+	}
 }
