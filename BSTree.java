@@ -117,7 +117,7 @@ class BSTree<T>
 		return containsHelper(root, key);
 	}
 	@SuppressWarnings("unchecked")
-	public boolean containsHelper(BSTNode<T> root, T key){
+	private boolean containsHelper(BSTNode<T> root, T key){
 		int comp = ((Comparable)key).compareTo( root.getKey() );
 		if (root.getKey().equals(key))
 			return true;
