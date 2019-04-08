@@ -1,0 +1,6 @@
+jsmith ASPCA YCL ACLU
+bjones ASPCA NRA
+mjackson GREENPEACE NAMBLA
+kjohnson SAVE_THE_WHALES MADD
+jroberts NRA MADD
+jsandusky YCL NAMBLA ACLU

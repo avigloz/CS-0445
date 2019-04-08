@@ -1,0 +1,15 @@
+148	tachometer
+172	tempGuage
+123	thermostat
+111	wiperBlade
+143	gasTankTube
+155	fuelGuage
+101	eBrakeCable
+198	brakePad
+165	rotorWire
+140	axleGear
+116	starterBox
+176	alternator
+182	turnSignal
+126	oilFilter
+166	gasFilter
