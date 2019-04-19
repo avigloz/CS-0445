@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Graph
 {
-	private final int NO_EDGE = -1;
+	//private final int NO_EDGE = -1;
 	private Edge[] G;
 
 	private int numEdges;
@@ -36,42 +36,47 @@ public class Graph
 		G = new Edge[dimension]; 	
 		numEdges=0;
 
-        // WRITE A LOOP THAT PUTS NO_EDGE VALUE EVERYWHERE EXCPT ON THE DIAGONAL
-        // for (int i = 0; i < dimension; i++)
-        //     for (int j = 0; j < dimension; j++)
-        //         G[i][j] = (i == j) ? 0 : NO_EDGE;
 		while ( graphFile.hasNextInt() )
 		{
-			// read in the row,col,weight // that eat us this line
-            // call add edge
             int r = graphFile.nextInt();
             int c = graphFile.nextInt();
             int w = graphFile.nextInt();
             addEdge(r, c, w);
 		}
+		// for (int node = 0 ; node < G.length ; ++node )
+		// {
+		// 	System.out.format( "DEBUG:: in (%d)=%d  ",node,inDegree(node) );
+		// 	System.out.format( "out(%d)=%d  ",node,outDegree(node) );
+		// 	System.out.format( "deg(%d)=%d\n",node,degree(node) );
+		// }
 
 	} // END readGraphFile
 
 	private void addEdge( int r, int c, int w )
 	{
-		// INSERT AT FRONT IN THE ARRAY
-		// compare 
-
+		Edge head = G[r];
+		G[r] = new Edge(c, w, head);
+		numEdges++;
 	}
 	
     private boolean hasEdge(int fromNode, int toNode)
     {
 		if (numEdges == 0)
 			return false;
-        return (G[fromNode] != NO_EDGE) ? true : false;
-    }
+		for (Edge curr = G[fromNode]; curr != null; curr = curr.next)
+			if (curr.dest == toNode)
+				return true;
+		return false;
+	}
 	// IN DEGREE IS NUMBER OF ROADS INTO THIS CITY
 	// NODE IS THE ROW COL#. IN DEGREE IS HOW MANY POSITIVE NUMBERS IN THAT COL
 	private int inDegree(int node)
 	{
 		int deg = 0;
-		for (int i = 0; i < G[node].length; i++)
-			deg = (G[i][node] == NO_EDGE || G[i][node] == 0) ? deg : (deg + 1);        
+		for (int i = 0; i < G.length; i++)
+			for (Edge curr = G[i]; curr != null; curr = curr.next)
+				if (curr.dest == node)
+					deg++;
 		return deg;
 	}
 
@@ -80,8 +85,8 @@ public class Graph
 	private int outDegree(int node)
 	{
 		int deg = 0;
-		for (int i = 0; i < G[node].length; i++)
-			deg = (G[node][i] == NO_EDGE || G[node][i] == 0) ? deg : (deg + 1);        
+		for (Edge curr = G[node]; curr != null; curr = curr.next)
+			deg++;
 		return deg;
 	}
 
@@ -139,11 +144,20 @@ public class Graph
 		return deg;
 	}
 	
-	public void removeEdge(int fromNode, int toNode) throws Exception
+	public void removeEdge(int fromNode, int toNode)
 	{
 		try {
-			if (hasEdge(fromNode, toNode))
-				G[fromNode][toNode] = NO_EDGE;
+			if (G[fromNode].dest == toNode) {
+				G[fromNode] = G[fromNode].next;
+				return;
+			}
+			Edge curr = G[fromNode];
+			Edge prev = null;
+			while (curr != null && !(curr.dest == toNode)) {
+				prev = curr;
+				curr = curr.next;
+			}
+			prev.next = curr.next;
 		}
 		catch (Exception e){
 			System.out.println(new Exception(("Non Existent Edge Exception: removeEdge(" + fromNode + "," + toNode + ")"), e));
@@ -151,18 +165,20 @@ public class Graph
 	}
 	// TOSTRING
 	public String toString()
-	{	String the2String = "";
+	{	
+		String the2String = "";
 		for (int r=0 ; r < G.length ;++r )
 		{
-			for ( int c=0 ; c < G[r].length ; ++c )
-				the2String += String.format("%3s",G[r][c] + " ");
+			the2String+=(r + ":");
+			for (Edge curr = G[r]; curr != null; curr = curr.next)
+				the2String+=(" -> " + "[" + curr.dest + "," + curr.weight + "]");
 			the2String += "\n";
 		}
 		return the2String;
 	} // END TOSTRING          
 } //EOF
 
-public class Edge
+class Edge
 {
 	int dest;
 	int weight;
